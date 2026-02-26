@@ -18,7 +18,7 @@ A Django-based news platform for independent journalism and curated publications
 
 ### 1. Clone the Repository
 ```bash
-git clone https://github.com/your-username/django-news-app.git
+git clone https://github.com/Jose-Vilanculo/News_Application_Consolidation.git.git
 cd django-news-app
 ```
 

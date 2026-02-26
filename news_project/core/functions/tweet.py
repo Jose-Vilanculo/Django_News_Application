@@ -8,8 +8,8 @@ class Tweet():
     _instance = None
     TOKEN_FILE = "twitter_token.json"
 
-    CONSUMER_KEY = 'Enter Consumer Key Here'
-    CONSUMER_SECRET = 'Enter Consumer Secret Here'
+    CONSUMER_KEY = os.environ.get('TWITTER_CONSUMER_KEY')
+    CONSUMER_SECRET = os.environ.get('TWITTER_CONSUMER_SECRET')
 
     TWITTER_SUPPORTED_MIME_TYPES = {'image/jpeg', 'image/png', 'image/gif'}
 

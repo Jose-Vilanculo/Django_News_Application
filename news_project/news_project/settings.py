@@ -11,7 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
 import os
+
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +30,9 @@ SECRET_KEY = 'django-insecure-7e#iw0vi1mx5vu#7v5r1(5+l&9dv-^lrb)5wlhh^0^z$9-hi9b
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+
+]
 
 
 # Application definition
@@ -50,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'news_project.urls'
@@ -79,10 +86,10 @@ WSGI_APPLICATION = 'news_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME', 'newsdb'),
-        'USER': os.environ.get('DB_USER', 'newsuser'),
-        'PASSWORD': os.environ.get('DB_PASSWORD', 'newspassword'),
-        'HOST': os.environ.get('DB_HOST', 'db'),
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST', '127.0.0.1'),
         'PORT': os.environ.get('DB_PORT', '3306'),
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -130,7 +137,7 @@ STATICFILES_DIRS = [
     BASE_DIR / "core/static",
 ]
 
-STATIC_ROOT = BASE_DIR / "static"
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -150,8 +157,8 @@ EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "Your Email"   # <-- Replace with actual email
-EMAIL_HOST_PASSWORD = "Your_Password"   # <-- Replace with actual app password
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')   # from .env
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')   # from .env
 
 # or use the bellow code instead to log emails in console
 '''EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
