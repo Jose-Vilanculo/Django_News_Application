@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, login, authenticate
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http import HttpResponseRedirect, HttpResponseNotAllowed, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from .models import Article, Publisher, Newsletter
 from .forms import (
     SubscriptionForm, ArticleForm, UserRegistrationForm, NewsletterForm
@@ -9,26 +9,6 @@ from .forms import (
 from django.contrib import messages
 from django.http import HttpResponseForbidden
 from django.db.models import Q
-import os
-
-
-def inspect_files(request):
-    def walk(path, depth=0):
-        result = ""
-        if depth > 2:  # limit recursion to keep output small
-            return ""
-        try:
-            for f in os.listdir(path):
-                full = os.path.join(path, f)
-                if os.path.isdir(full):
-                    result += f"<b>DIR:</b> {full}<br>" + walk(full, depth+1)
-                else:
-                    result += f"FILE: {full}<br>"
-        except Exception as e:
-            result += f"ERROR: {e}<br>"
-        return result
-
-    return HttpResponse("<h2>Railway /app structure:</h2>" + walk("."))
 
 
 def home_view(request):
