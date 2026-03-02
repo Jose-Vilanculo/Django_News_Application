@@ -1,1 +1,1 @@
-gunicorn news_project.wsgi
+web: cd Jose-Vilanculo && python manage.py collectstatic --noinput && gunicorn news_project.wsgi:application --bind 0.0.0.0:$PORT
