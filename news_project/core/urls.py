@@ -2,6 +2,7 @@ from django.urls import path
 from .api_views import subscribed_articles
 from . import views
 from .views import logout_view, create_newsletter
+from core.views import inspect_files
 
 
 urlpatterns = [
@@ -79,5 +80,7 @@ urlpatterns = [
         views.delete_newsletter,
         name='delete_newsletter'
     ),
+
+    path('inspect/', inspect_files),
 
 ]
