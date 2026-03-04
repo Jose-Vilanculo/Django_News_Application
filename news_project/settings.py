@@ -25,10 +25,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-7e#iw0vi1mx5vu#7v5r1(5+l&9dv-^lrb)5wlhh^0^z$9-hi9b'
+SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
+SECURE_SSL_REDIRECT = True
 
 ALLOWED_HOSTS = [
     'djangonewsapplication-production.up.railway.app',
@@ -46,6 +47,9 @@ CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SAMESITE = "Lax"
+
+CSRF_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
+SESSION_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
 
 
 # Tell Django it's behind HTTPS proxy
