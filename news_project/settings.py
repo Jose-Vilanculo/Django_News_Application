@@ -28,33 +28,54 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-SECURE_SSL_REDIRECT = True
 
-ALLOWED_HOSTS = [
-    'djangonewsapplication-production.up.railway.app',
-    'localhost',
-    '127.0.0.1',
+
+# ENV detection: local vs production
+ENV = os.environ.get("ENV", "development")  # Set ENV=production on Railway
+
+DEBUG = ENV != "production"
+
+# Secret key
+SECRET_KEY = os.environ['SECRET_KEY']
+
+# Allowed hosts
+if ENV == "production":
+    ALLOWED_HOSTS = ["djangonewsapplication-production.up.railway.app"]
+else:
+    ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
+
+# SSL & CSRF settings
+if ENV == "production":
+    SECURE_SSL_REDIRECT = True
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SAMESITE = "Lax"
+    SESSION_COOKIE_SAMESITE = "Lax"
+
+    # Cookie domain for production
+    CSRF_COOKIE_DOMAIN = ".djangonewsapplication-production.up.railway.app"
+    SESSION_COOKIE_DOMAIN = ".djangonewsapplication-production.up.railway.app"
+
+    # Proxy headers for Railway HTTPS
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
+else:
+    # Local development (HTTP)
+    SECURE_SSL_REDIRECT = False
+    CSRF_COOKIE_SECURE = False
+    SESSION_COOKIE_SECURE = False
+
+# CSRF trusted origins (only required in production)
+CSRF_TRUSTED_ORIGINS = []
+if ENV == "production":
+    CSRF_TRUSTED_ORIGINS = [
+        "https://djangonewsapplication-production.up.railway.app"
     ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://djangonewsapplication-production.up.railway.app'
-]
-
-
-# Cookie Security Flags
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SAMESITE = "Lax"
-
-CSRF_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
-SESSION_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
-
-
-# Tell Django it's behind HTTPS proxy
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-USE_X_FORWARDED_HOST = True
+if ENV == "production":
+    # Tell Django it's behind HTTPS proxy (Railway)
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    USE_X_FORWARDED_HOST = True
 
 
 # Application definition
