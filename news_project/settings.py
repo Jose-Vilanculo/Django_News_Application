@@ -24,19 +24,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ['SECRET_KEY']
-
-# SECURITY WARNING: don't run with debug turned on in production!
 
 
 # ENV detection: local vs production
 ENV = os.environ.get("ENV", "development")  # Set ENV=production on Railway
 
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = ENV != "production"
 
-# Secret key
-SECRET_KEY = os.environ['SECRET_KEY']
 
 # Allowed hosts
 if ENV == "production":
@@ -53,8 +52,8 @@ if ENV == "production":
     SESSION_COOKIE_SAMESITE = "Lax"
 
     # Cookie domain for production
-    CSRF_COOKIE_DOMAIN = ".djangonewsapplication-production.up.railway.app"
-    SESSION_COOKIE_DOMAIN = ".djangonewsapplication-production.up.railway.app"
+    CSRF_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
+    SESSION_COOKIE_DOMAIN = "djangonewsapplication-production.up.railway.app"
 
     # Proxy headers for Railway HTTPS
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
@@ -71,11 +70,6 @@ if ENV == "production":
     CSRF_TRUSTED_ORIGINS = [
         "https://djangonewsapplication-production.up.railway.app"
     ]
-
-if ENV == "production":
-    # Tell Django it's behind HTTPS proxy (Railway)
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-    USE_X_FORWARDED_HOST = True
 
 
 # Application definition
