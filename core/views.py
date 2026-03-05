@@ -18,7 +18,6 @@ def home_view(request):
 
 
 def login_view(request):
-    print("Host:", request.get_host())
     if request.method == 'POST':
         username = request.POST['username']
         password = request.POST['password']

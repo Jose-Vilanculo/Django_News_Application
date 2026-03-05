@@ -11,7 +11,7 @@ A Django-based news platform for independent journalism and curated publications
 - **Automatic email & X (Twitter) posting** for approved articles
 - **REST API** for article retrieval
 - **Responsive frontend** (Bootstrap)
-- **MariaDB** database backend
+- **SQL** database backend
 - **Unit tests** included
 
 ## 🚀 Setup Instructions
@@ -40,26 +40,34 @@ python -m venv vir-env
 pip install -r requirements.txt
 ```
 
-## 🗄️ MariaDB Setup
+## 🗄️ MYSQL Setup
 
-1. **Install MariaDB** → [Download](https://mariadb.org/download/)  
+1. **Install MYSQL** → [Download](https://www.mysql.com/downloads/)  
 2. **Create Database & User**:
    ```sql
    CREATE DATABASE news_app CHARACTER SET utf8mb4;
-   CREATE USER 'jose_user'@'localhost' IDENTIFIED BY 'your_password';
-   GRANT ALL PRIVILEGES ON news_app.* TO 'jose_user'@'localhost';
+   CREATE USER 'your_user'@'localhost' IDENTIFIED BY 'your_password';
+   GRANT ALL PRIVILEGES ON news_app.* TO 'your_user'@'localhost';
    FLUSH PRIVILEGES;
    ```
+**Create a .env file and add your DB Variables**
+  DB_NAME=your_db_name
+  DB_USER=your_db_user
+  DB_PASSWORD=your_db_password
+  DB_HOST=your_db_host
+  DB_PORT=your_db_port
+  --NB!! Add .env to your .gitignore
+
 3. **Configure `settings.py`**:
    ```python
   DATABASES = {
       'default': {
           'ENGINE': 'django.db.backends.mysql',
-          'NAME': os.environ.get('DB_NAME', 'newsdb'),
-          'USER': os.environ.get('DB_USER', 'newsuser'),
-          'PASSWORD': os.environ.get('DB_PASSWORD', 'newspassword'),
-          'HOST': os.environ.get('DB_HOST', 'db'),
-          'PORT': os.environ.get('DB_PORT', '3306'),
+          'NAME': os.environ.get('DB_NAME'),
+          'USER': os.environ.get('DB_USER'),
+          'PASSWORD': os.environ.get('DB_PASSWORD'),
+          'HOST': os.environ.get('DB_HOST'),
+          'PORT': os.environ.get('DB_PORT'),
           'OPTIONS': {
               'charset': 'utf8mb4',
           },
@@ -100,19 +108,19 @@ TWITTER_ACCESS_SECRET = 'your-access-secret'
 
 **`Dockerfile`**
 - Uses `python:3.11-slim`
-- Installs dependencies + MariaDB client libs
+- Installs dependencies + MYSQL client libs
 - Copies code to `/app` and exposes port `8000`
 
 **`docker-compose.yml`**
-- **db** service → MariaDB
+- **db** service → MYSQL
 - **web** service → Django app
 - Environment variables loaded from `.env`:
   ```env
-  DB_NAME=news_app
-  DB_USER=jose_user
-  DB_PASSWORD=your_password
-  DB_HOST=db
-  DB_PORT=3306
+  DB_NAME=your_db_name
+  DB_USER=your_db_user
+  DB_PASSWORD=your_db_password
+  DB_HOST=your_db_host
+  DB_PORT=your_db_port
   ```
 
 Run:
@@ -128,7 +136,7 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
-Visit: **http://127.0.0.1:8000**
+Visit: **http://localhost:8000/**
 
 ## 🧪 Testing
 ```bash
@@ -139,6 +147,9 @@ python manage.py test
 - Get subscribed articles:  
   `GET /api/articles/`
 - Use tools like Postman for authentication & queries.
+
+## Live Site Link:
+- **https://djangonewsapplication-production.up.railway.app/**
 
 ## 📝 Notes
 - Journalists can select a publisher when creating content.
