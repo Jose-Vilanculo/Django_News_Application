@@ -1,7 +1,6 @@
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth import logout, login, authenticate
 from django.shortcuts import get_object_or_404, render, redirect
-from django.db import transaction
 from django.http import HttpResponseRedirect, HttpResponseNotAllowed
 from .models import Article, Publisher, Newsletter
 from .forms import (
@@ -208,24 +207,23 @@ def create_article(request):
 @user_passes_test(is_editor_or_journalist)
 def edit_article(request, pk):
 
-    with transaction.atomic():
-        article = get_object_or_404(Article.objects.select_for_update(), pk=pk)
+    article = get_object_or_404(Article, pk=pk)
 
-        # Check ownership/permission
-        if request.user.is_journalist() and article.journalist != request.user:
-            messages.error(request, "You can only edit your own articles.")
+    # Check ownership/permission
+    if request.user.is_journalist() and article.journalist != request.user:
+        messages.error(request, "You can only edit your own articles.")
+        return redirect('dashboard')
+
+    if request.method == 'POST':
+        form = ArticleForm(request.POST, instance=article)
+
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Article updated.")
             return redirect('dashboard')
 
-        if request.method == 'POST':
-            form = ArticleForm(request.POST, instance=article)
-
-            if form.is_valid():
-                form.save()
-                messages.success(request, "Article updated.")
-                return redirect('dashboard')
-
-        else:
-            form = ArticleForm(instance=article)
+    else:
+        form = ArticleForm(instance=article)
 
     return render(
         request,
